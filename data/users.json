@@ -1,0 +1,9 @@
+{
+  "users": [
+    {
+      "email": "admin@modabrasileira.com",
+      "password": "scrypt:32768:8:1$dq6ZlI1bZU4OjZzU$86721efdb4a286e23db46049cbd8cee3ac521ab8f7222cc05e34e48084967381c79826167786ed493a32c8f77f573f3ec7f35b6800f50314c4d6a656b13075ce",
+      "is_admin": true
+    }
+  ]
+}
