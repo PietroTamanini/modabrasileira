@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .admin-header {
+        background: linear-gradient(135deg, #0066FF 0%, #009739 100%);
+        color: white;
+        padding: 60px 0;
+        margin-bottom: 60px;
+    }
+
+    .admin-header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .admin-header h1 {
+        font-size: 48px;
+        font-weight: 800;
+        letter-spacing: -1.5px;
+    }
+
+    .admin-header p {
+        font-size: 18px;
+        opacity: 0.9;
+        margin-top: 8px;
+    }
+
+    .admin-actions {
+        display: flex;
+        gap: 16px;
+    }
+
+    .btn-admin {
+        background: white;
+        color: var(--blue-primary);
+        padding: 14px 28px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 700;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-admin:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+        margin-bottom: 60px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 32px;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: var(--text-secondary);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+    }
+
+    .stat-value {
+        font-size: 42px;
+        font-weight: 800;
+        color: var(--blue-primary);
+        letter-spacing: -1px;
+    }
+
+    .products-table-container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+
+    .table-header h2 {
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    .products-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 12px;
+    }
+
+    .products-table thead th {
+        text-align: left;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 16px;
+        background: var(--bg-light);
+        border: none;
+    }
+
+    .products-table thead th:first-child {
+        border-radius: 12px 0 0 12px;
+    }
+
+    .products-table thead th:last-child {
+        border-radius: 0 12px 12px 0;
+    }
+
+    .products-table tbody tr {
+        background: white;
+        transition: all 0.3s;
+    }
+
+    .products-table tbody tr:hover {
+        transform: scale(1.01);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .products-table tbody td {
+        padding: 20px 16px;
+        border-top: 1px solid var(--border-light);
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .products-table tbody td:first-child {
+        border-left: 1px solid var(--border-light);
+        border-radius: 12px 0 0 12px;
+    }
+
+    .products-table tbody td:last-child {
+        border-right: 1px solid var(--border-light);
+        border-radius: 0 12px 12px 0;
+    }
+
+    .product-img-cell {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .product-img-cell img {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .product-name-cell {
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .product-category-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        background: var(--bg-light);
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--blue-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .product-price-cell {
+        font-weight: 800;
+        font-size: 18px;
+        color: var(--green);
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-edit {
+        padding: 8px 16px;
+        background: var(--blue-primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-edit:hover {
+        background: var(--blue-dark);
+    }
+
+    .btn-delete {
+        padding: 8px 16px;
+        background: #ff3b30;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-delete:hover {
+        background: #d62518;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    .empty-state svg {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 24px;
+        opacity: 0.3;
+    }
+
+    .empty-state h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .empty-state p {
+        color: var(--text-secondary);
+        margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+        .admin-header-content {
+            flex-direction: column;
+            gap: 24px;
+            text-align: center;
+        }
+
+        .admin-header h1 {
+            font-size: 32px;
+        }
+
+        .products-table-container {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .products-table {
+            min-width: 800px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <div class="container">
+        <div class="admin-header-content">
+            <div>
+                <h1>Painel Admin</h1>
+                <p>Gerencie seus produtos</p>
+            </div>
+            <div class="admin-actions">
+                <a href="{{ url_for('add_product') }}" class="btn-admin">
+                    <span>➕</span> Adicionar Produto
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total de Produtos</div>
+            <div class="stat-value">{{ products|length }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Categorias</div>
+            <div class="stat-value">{{ products|map(attribute='category')|unique|list|length }}</div>
+        </div>
+    </div>
+
+    <div class="products-table-container">
+        <div class="table-header">
+            <h2>Seus Produtos</h2>
+        </div>
+
+        {% if products %}
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Categoria</th>
+                        <th>Preço</th>
+                        <th>Tamanhos</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td>
+                                <div class="product-img-cell">
+                                    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+                                    <span class="product-name-cell">{{ product.name }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="product-category-badge">{{ product.category }}</span>
+                            </td>
+                            <td class="product-price-cell">
+                                R$ {{ "%.2f"|format(product.price) }}
+                            </td>
+                            <td>
+                                {{ product.sizes|join(', ') }}
+                            </td>
+                            <td>
+                                <div class="product-actions">
+                                    <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn-edit">Editar</a>
+                                    <form method="POST" action="{{ url_for('delete_product', product_id=product.id) }}" style="display: inline;">
+                                        <button type="submit" class="btn-delete" onclick="return confirm('Tem certeza que deseja deletar este produto?')">Deletar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                </svg>
+                <h3>Nenhum produto cadastrado</h3>
+                <p>Comece adicionando seu primeiro produto</p>
+                <a href="{{ url_for('add_product') }}" class="btn-primary">Adicionar Produto</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

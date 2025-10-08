@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 48px;
+    }
+
+    .form-header h1 {
+        font-size: 42px;
+        font-weight: 800;
+        margin-bottom: 12px;
+        letter-spacing: -1px;
+    }
+
+    .form-header p {
+        font-size: 18px;
+        color: var(--text-secondary);
+    }
+
+    .product-form {
+        background: white;
+        padding: 48px;
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 28px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: var(--text-primary);
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 16px;
+        border: 2px solid var(--border-light);
+        border-radius: 12px;
+        font-size: 16px;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s;
+        background: var(--bg-light);
+    }
+
+    .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--blue-primary);
+        background: white;
+    }
+
+    .image-upload {
+        position: relative;
+        border: 3px dashed var(--border-light);
+        border-radius: 16px;
+        padding: 48px;
+        text-align: center;
+        transition: all 0.3s;
+        cursor: pointer;
+        background: var(--bg-light);
+    }
+
+    .image-upload:hover {
+        border-color: var(--blue-primary);
+        background: white;
+    }
+
+    .image-upload input[type="file"] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .upload-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+
+    .upload-text h3 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .upload-text p {
+        font-size: 14px;
+        color: var(--text-secondary);
+    }
+
+    .image-preview {
+        margin-top: 20px;
+        display: none;
+    }
+
+    .image-preview img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .sizes-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 12px;
+    }
+
+    .size-checkbox {
+        position: relative;
+    }
+
+    .size-checkbox input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .size-checkbox label {
+        display: block;
+        padding: 14px;
+        background: var(--bg-light);
+        border: 2px solid var(--border-light);
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        user-select: none;
+    }
+
+    .size-checkbox input[type="checkbox"]:checked + label {
+        background: var(--blue-primary);
+        color: white;
+        border-color: var(--blue-primary);
+    }
+
+    .size-checkbox label:hover {
+        border-color: var(--blue-primary);
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 16px;
+        margin-top: 40px;
+    }
+
+    .btn-submit {
+        flex: 1;
+        background: var(--blue-primary);
+        color: white;
+        padding: 18px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-submit:hover {
+        background: var(--blue-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3);
+    }
+
+    .btn-cancel {
+        flex: 1;
+        background: transparent;
+        color: var(--text-secondary);
+        padding: 18px;
+        border: 2px solid var(--border-light);
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .btn-cancel:hover {
+        border-color: var(--text-primary);
+        color: var(--text-primary);
+    }
+
+    @media (max-width: 768px) {
+        .product-form {
+            padding: 32px 24px;
+        }
+
+        .form-header h1 {
+            font-size: 32px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-header">
+        <h1>Adicionar Produto</h1>
+        <p>Preencha os detalhes do novo produto</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('add_product') }}" enctype="multipart/form-data" class="product-form">
+        <div class="form-group">
+            <label for="name">Nome do Produto *</label>
+            <input type="text" id="name" name="name" required placeholder="Ex: Camisa Polo Brasil">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Descrição *</label>
+            <textarea id="description" name="description" required placeholder="Descreva o produto em detalhes..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Preço (R$) *</label>
+            <input type="number" id="price" name="price" step="0.01" min="0" required placeholder="99.90">
+        </div>
+
+        <div class="form-group">
+            <label for="category">Categoria *</label>
+            <select id="category" name="category" required>
+                <option value="">Selecione uma categoria</option>
+                <option value="Camisetas">Camisetas</option>
+                <option value="Camisas">Camisas</option>
+                <option value="Calças">Calças</option>
+                <option value="Shorts">Shorts</option>
+                <option value="Vestidos">Vestidos</option>
+                <option value="Saias">Saias</option>
+                <option value="Jaquetas">Jaquetas</option>
+                <option value="Acessórios">Acessórios</option>
+                <option value="Calçados">Calçados</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Tamanhos Disponíveis *</label>
+            <div class="sizes-group">
+                <div class="size-checkbox">
+                    <input type="checkbox" id="size-pp" name="sizes" value="PP">
+                    <label for="size-pp">PP</label>
+                </div>
+                <div class="size-checkbox">
+                    <input type="checkbox" id="size-p" name="sizes" value="P">
+                    <label for="size-p">P</label>
+                </div>
+                <div class="size-checkbox">
+                    <input type="checkbox" id="size-m" name="sizes" value="M">
+                    <label for="size-m">M</label>
+                </div>
+                <div class="size-checkbox">
+                    <input type="checkbox" id="size-g" name="sizes" value="G">
+                    <label for="size-g">G</label>
+                </div>
+                <div class="size-checkbox">
+                    <input type="checkbox" id="size-gg" name="sizes" value="GG">
+                    <label for="size-gg">GG</label>
+                </div>
+                <div class="size-checkbox">
+                    <input type="checkbox" id="size-xgg" name="sizes" value="XGG">
+                    <label for="size-xgg">XGG</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Imagem do Produto *</label>
+            <div class="image-upload" id="imageUpload">
+                <input type="file" id="image" name="image" accept="image/*" required onchange="previewImage(event)">
+                <div class="upload-icon">📸</div>
+                <div class="upload-text">
+                    <h3>Clique para fazer upload</h3>
+                    <p>Ou arraste e solte sua imagem aqui</p>
+                </div>
+            </div>
+            <div class="image-preview" id="imagePreview">
+                <img id="previewImg" src="" alt="Preview">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('admin_panel') }}" class="btn-cancel">Cancelar</a>
+            <button type="submit" class="btn-submit">Adicionar Produto</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                const previewImg = document.getElementById('previewImg');
+                previewImg.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+{% endblock %}

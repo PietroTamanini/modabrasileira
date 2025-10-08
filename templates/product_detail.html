@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .product-detail-container {
+        max-width: 1400px;
+        margin: 80px auto;
+        padding: 0 40px;
+    }
+
+    .product-detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: start;
+    }
+
+    .product-image-section {
+        position: sticky;
+        top: 100px;
+    }
+
+    .product-main-image {
+        width: 100%;
+        height: 700px;
+        object-fit: cover;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        background: var(--bg-light);
+    }
+
+    .product-info-section {
+        padding: 20px 0;
+    }
+
+    .product-category-badge {
+        display: inline-block;
+        padding: 10px 20px;
+        background: linear-gradient(135deg, var(--blue-primary), var(--green));
+        color: white;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 24px;
+    }
+
+    .product-title {
+        font-size: 56px;
+        font-weight: 800;
+        margin-bottom: 24px;
+        letter-spacing: -2px;
+        line-height: 1.1;
+    }
+
+    .product-price {
+        font-size: 48px;
+        font-weight: 800;
+        color: var(--green);
+        margin-bottom: 32px;
+        letter-spacing: -1.5px;
+    }
+
+    .product-description {
+        font-size: 18px;
+        line-height: 1.8;
+        color: var(--text-secondary);
+        margin-bottom: 40px;
+    }
+
+    .product-sizes {
+        margin-bottom: 40px;
+    }
+
+    .product-sizes h3 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+    }
+
+    .sizes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 12px;
+    }
+
+    .size-option {
+        padding: 18px;
+        background: white;
+        border: 2px solid var(--border-light);
+        border-radius: 12px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.3s;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .size-option:hover {
+        border-color: var(--blue-primary);
+        background: var(--bg-light);
+        transform: translateY(-2px);
+    }
+
+    .size-option.selected {
+        background: var(--blue-primary);
+        color: white;
+        border-color: var(--blue-primary);
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 40px;
+    }
+
+    .btn-buy {
+        flex: 2;
+        background: var(--blue-primary);
+        color: white;
+        padding: 20px 40px;
+        border: none;
+        border-radius: 14px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-buy:hover {
+        background: var(--blue-dark);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 36px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-favorite {
+        flex: 1;
+        background: white;
+        color: var(--text-primary);
+        padding: 20px;
+        border: 2px solid var(--border-light);
+        border-radius: 14px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-favorite:hover {
+        border-color: #ff3b30;
+        color: #ff3b30;
+    }
+
+    .product-features {
+        background: var(--bg-light);
+        padding: 32px;
+        border-radius: 20px;
+        margin-bottom: 40px;
+    }
+
+    .product-features h3 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        font-size: 16px;
+        color: var(--text-secondary);
+    }
+
+    .feature-icon {
+        font-size: 24px;
+    }
+
+    .breadcrumb {
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+    }
+
+    .breadcrumb a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--blue-primary);
+    }
+
+    .breadcrumb span {
+        color: var(--text-secondary);
+    }
+
+    @media (max-width: 968px) {
+        .product-detail-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .product-image-section {
+            position: relative;
+            top: 0;
+        }
+
+        .product-main-image {
+            height: 500px;
+        }
+
+        .product-title {
+            font-size: 36px;
+        }
+
+        .product-price {
+            font-size: 36px;
+        }
+
+        .product-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="product-detail-container">
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Início</a>
+        <span>/</span>
+        <span>{{ product.name }}</span>
+    </div>
+
+    <div class="product-detail-grid">
+        <div class="product-image-section">
+            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" class="product-main-image">
+        </div>
+
+        <div class="product-info-section">
+            <span class="product-category-badge">{{ product.category }}</span>
+            <h1 class="product-title">{{ product.name }}</h1>
+            <div class="product-price">R$ {{ "%.2f"|format(product.price) }}</div>
+            <p class="product-description">{{ product.description }}</p>
+
+            <div class="product-sizes">
+                <h3>Selecione o Tamanho</h3>
+                <div class="sizes-grid">
+                    {% for size in product.sizes %}
+                        <div class="size-option" onclick="selectSize(this)">{{ size }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="product-actions">
+                <button class="btn-buy" onclick="buyProduct()">Comprar Agora</button>
+                <button class="btn-favorite">❤️</button>
+            </div>
+
+            <div class="product-features">
+                <h3>Características</h3>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span>100% Algodão Brasileiro</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span>Frete Grátis para todo Brasil</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span>Troca grátis em até 30 dias</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span>Garantia de qualidade</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function selectSize(element) {
+        document.querySelectorAll('.size-option').forEach(el => {
+            el.classList.remove('selected');
+        });
+        element.classList.add('selected');
+    }
+
+    function buyProduct() {
+        const selectedSize = document.querySelector('.size-option.selected');
+        if (!selectedSize) {
+            alert('Por favor, selecione um tamanho!');
+            return;
+        }
+        alert('Funcionalidade de compra será implementada em breve!\nProduto: {{ product.name }}\nTamanho: ' + selectedSize.textContent);
+    }
+</script>
+{% endblock %}

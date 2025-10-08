@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .auth-container {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+    }
+
+    .auth-card {
+        background: white;
+        border-radius: 24px;
+        padding: 60px;
+        max-width: 480px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .auth-header h1 {
+        font-size: 36px;
+        font-weight: 800;
+        margin-bottom: 12px;
+        letter-spacing: -1px;
+    }
+
+    .auth-header p {
+        font-size: 16px;
+        color: var(--text-secondary);
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-primary);
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 16px;
+        border: 2px solid var(--border-light);
+        border-radius: 12px;
+        font-size: 16px;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s;
+        background: var(--bg-light);
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--blue-primary);
+        background: white;
+    }
+
+    .btn-submit {
+        width: 100%;
+        background: var(--blue-primary);
+        color: white;
+        padding: 16px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 12px;
+    }
+
+    .btn-submit:hover {
+        background: var(--blue-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 32px;
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+
+    .auth-footer a {
+        color: var(--blue-primary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .auth-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .auth-card {
+            padding: 40px 24px;
+        }
+
+        .auth-header h1 {
+            font-size: 28px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>Bem-vindo de volta</h1>
+            <p>Entre na sua conta</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="seu@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-submit">Entrar</button>
+        </form>
+
+        <div class="auth-footer">
+            Não tem uma conta? <a href="{{ url_for('register') }}">Cadastre-se</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
